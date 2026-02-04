@@ -1,15 +1,26 @@
 <script setup>
+import { ref } from "vue";
 import  formulario from "./components/form.vue";
 import paleta from "./components/paleta.vue"
-let cor = "";
-const enviarCor = (corEscolhida) => {
-  cor = corEscolhida;
+let cor = ref("");
+const pegaCor = (corEscolhida) => {
+  cor.value = corEscolhida;
 }
 </script>
 
 <template>
- <formulario @enviarCor="enviarCor"/>
- <paleta :cor-escolhida="cor"></paleta>
+  <div class="maior">
+      <formulario @enviarCor="pegaCor"/>
+      <paleta :corEscolhida="cor"></paleta>
+   
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+ div.maior {
+  display: flex;
+  justify-content: space-around;
+  padding: 10vh -0;
+}
+ 
+</style>

@@ -1,21 +1,22 @@
 <script setup>
 import {ref} from 'vue'
-const emit = defineEmits(['enviarObjetos']);
+const emits = defineEmits(['enviarCor']);
 const corDominante = ref(' ');
 const escolherCor = () => {
     corDominante.value = document.getElementById('cor').value; 
-    console.log(corDominante.value);
-    emit('enviarCor', corDominante.value);
+    emits('enviarCor', corDominante.value);
 }
 </script>
 
 <template>
-<h1>
+    <div>    
+        <h1>
     Gerador de paletas de cores
 </h1>
 <form @submit.prevent="escolherCor">
     <label>
             Escolha a cor dominante da paleta:
+            <br>
         <input type="color" id="cor" placeholder="Escolha uma cor de sua preferência" class="seletor">
     </label>
     <p>
@@ -26,17 +27,20 @@ const escolherCor = () => {
         Complementar (Cores opostas no círculo)
     </label>
     <br>
-    <button v-on:click="escolherCor">Gerar paleta</button>
+    <button>Gerar paleta</button>
 </form>
-</template>
-<style scoped>
+</div>
 
-* {
-    margin: 10px 0 10px 40px;
+</template>
+
+<style scoped>
+div {
+    display: block;
 }
-h1 {
-    margin-top: 5vh;
+template {
+    display: block;
 }
+
 input {
 margin: 0;
 }
