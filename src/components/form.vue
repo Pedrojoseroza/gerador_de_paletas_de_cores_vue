@@ -1,10 +1,13 @@
 <script setup>
 import {ref} from 'vue'
-const emits = defineEmits(['enviarCor']);
+const emits = defineEmits(['enviarCor', "enviarTipoDePaleta"]);
 const corDominante = ref(' ');
+const tipoDePaleta = ref('');
 const escolherCor = () => {
     corDominante.value = document.getElementById('cor').value; 
+    console.log(tipoDePaleta.value);
     emits('enviarCor', corDominante.value);
+    emits('enviarTipoDePaleta', tipoDePaleta.value);
 }
 </script>
 
@@ -22,12 +25,18 @@ const escolherCor = () => {
     <p>
         Escolha a composição da paleta de cor:
     </p>
-    <label>
-    <input type="radio" >
-        Complementar (Cores opostas no círculo)
-    </label>
+    <div>
+        <label>
+        <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="complementar">
+            Complementar (Cores opostas no círculo)
+        </label>
+        <label>
+            <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="triade">
+            Tríade (3 cores que possuem a mesma distância entre elas)
+        </label>
+    </div>
     <br>
-    <button>Gerar paleta</button>
+    <input type="submit" placeholder="Gerar paleta">
 </form>
 </div>
 
