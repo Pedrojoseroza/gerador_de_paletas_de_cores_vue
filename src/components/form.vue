@@ -26,14 +26,26 @@ const escolherCor = () => {
         Escolha a composição da paleta de cor:
     </p>
     <div>
-        <label>
-        <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="complementar">
-            Complementar (Cores opostas no círculo)
-        </label>
-        <label>
-            <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="triade">
-            Tríade (3 cores que possuem a mesma distância entre elas)
-        </label>
+        <ul>
+            <li>
+                <label>
+                <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="complementar">
+                    Complementar (Cores opostas no círculo)
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="triade">
+                    Tríade (3 cores que possuem a mesma distância entre elas, preferivel em cores coloridas e mais vivas)
+                </label>
+            </li>
+            <li>                
+                <label >
+                    <input type="radio" name="tipoDePaleta" v-model="tipoDePaleta" value="monocromatico">
+                    Monocromático (A cor informada será a média da paleta)
+                </label>
+            </li>
+        </ul>
     </div>
     <br>
     <input type="submit" placeholder="Gerar paleta">
@@ -49,7 +61,14 @@ div {
 template {
     display: block;
 }
-
+form {
+    max-width: 50vw;
+}
+form ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
 input {
 margin: 0;
 }
@@ -62,5 +81,11 @@ margin: 0;
 label,p {
     font-size: 20px;
     margin: 20px 0 ;
+}
+input:last-of-type {
+    color: white;
+    background-color: black;
+    font-weight: 600;
+    margin-top: 10px;
 }
 </style>

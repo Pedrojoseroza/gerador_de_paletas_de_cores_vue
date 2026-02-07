@@ -15,16 +15,19 @@ const props = defineProps({
 const corpo = ref(null);
 
 function atualizaPaleta () {
-    if (props.tipoDePaleta =='triade') {
-        triade()
-    }
-    else if(props.tipoDePaleta =='complementar'){
+    if (!corpo.value) return;
+
+    if (props.tipoDePaleta === 'triade') {
+        triade();
+    } else if (props.tipoDePaleta === 'complementar') {
         complementar();
+    } else if (props.tipoDePaleta === 'monocromatico') {
+        monocromatico();
     }
 }
 
 function triade() {
-     corpo.value.innerHTML = "";
+    corpo.value.innerHTML = "";
     const meuElemento = document.createElement('div');
     meuElemento.style.backgroundColor = props.corEscolhida;
     meuElemento.innerHTML = props.corEscolhida;
@@ -61,6 +64,95 @@ function triade() {
     corpo.value.appendChild(meuTerceiroElemento);
     
 }
+// Retorna um array;
+function complementar() {
+    corpo.value.innerHTML = "";
+    let corRGB = props.corEscolhida.split("");
+    corRGB.splice(0, 1); // Remove o #
+    let red = converteParaRGB(corRGB.slice(0, 2)); // Um valor númerico;
+    let green = converteParaRGB(corRGB.slice(2, 4)); // Um valor númerico;
+    let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
+    // Inverte a cor a partir de agora
+    const corOposta = rgbParaHexa(Math.abs(red - 255), Math.abs(green - 255), Math.abs(blue - 255));
+    const meuElemento = document.createElement('div');
+    meuElemento.style.backgroundColor = props.corEscolhida;
+    meuElemento.innerHTML = props.corEscolhida;
+    meuElemento.classList.add('complementar');
+    corpo.value.appendChild(meuElemento);
+    const meuSegundoElemento = document.createElement('div');
+    meuSegundoElemento.style.backgroundColor = corOposta;
+    meuSegundoElemento.innerHTML = corOposta;
+    meuSegundoElemento.classList.add('complementar');
+    corpo.value.appendChild(meuSegundoElemento);
+    
+}
+function monocromatico() {
+    corpo.value.innerHTML = "";
+    let corRGB = props.corEscolhida.split("");
+    corRGB.splice(0, 1); // Remove o #
+    let red = converteParaRGB(corRGB.slice(0, 2)); // Um valor númerico;
+    let green = converteParaRGB(corRGB.slice(2, 4)); // Um valor númerico;
+    let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
+    const hsl = rgbToHsl(red, green, blue); // Retorna um objeto
+
+    console.log(hsl);
+    
+    // Alterar apenas a luminosidade da cor
+    
+    let primeiroHsl ={...hsl};
+    primeiroHsl.l = Math.min(primeiroHsl.l + 30, 100);
+    console.log(primeiroHsl);
+    let primeiraCor = hslToRgb(primeiroHsl.h, primeiroHsl.s, primeiroHsl.l);
+    primeiraCor = rgbParaHexa(primeiraCor[0], primeiraCor[1], primeiraCor[2]);
+    const primeiraDiv = document.createElement('div');
+    primeiraDiv.classList.add('monocromatico');
+    primeiraDiv.style.backgroundColor = primeiraCor;
+    primeiraDiv.innerHTML= primeiraCor;
+
+    let segundoHsl ={...hsl};
+    segundoHsl.l = Math.min(segundoHsl.l + 15, 100);
+    let segundaCor = hslToRgb(segundoHsl.h, segundoHsl.s, segundoHsl.l);
+    console.log(segundaCor);
+    segundaCor = rgbParaHexa(segundaCor[0], segundaCor[1], segundaCor[2]);
+    console.log(segundaCor);
+    const segundaDiv = document.createElement('div');
+    segundaDiv.classList.add('monocromatico');
+    segundaDiv.style.backgroundColor = segundaCor;
+    segundaDiv.innerHTML = segundaCor;
+    
+    const terceiraDiv = document.createElement('div'); 
+    terceiraDiv.classList.add('monocromatico');
+    terceiraDiv.style.backgroundColor = props.corEscolhida;
+    terceiraDiv.innerHTML = props.corEscolhida;
+
+    let quartoHsl ={...hsl};
+    quartoHsl.l = Math.max(quartoHsl.l - 15, 0);
+    let quartaCor = hslToRgb(quartoHsl.h, quartoHsl.s, quartoHsl.l);
+    quartaCor = rgbParaHexa(quartaCor[0], quartaCor[1], quartaCor[2]);
+    const quartaDiv = document.createElement('div');
+    quartaDiv.classList.add('monocromatico');
+    quartaDiv.style.backgroundColor = quartaCor;
+    quartaDiv.innerHTML = quartaCor;
+
+    let quintoHsl ={...hsl};
+    quintoHsl.l = Math.max(quintoHsl.l - 30, 0);
+    let quintaCor = hslToRgb(quintoHsl.h, quintoHsl.s, quintoHsl.l);
+    quintaCor = rgbParaHexa(quintaCor[0], quintaCor[1], quintaCor[2]);
+    const quintaDiv = document.createElement('div');
+    quintaDiv.classList.add('monocromatico');
+    quintaDiv.style.backgroundColor = quintaCor;
+    quintaDiv.innerHTML = quintaCor;
+    
+
+    corpo.value.appendChild(primeiraDiv);
+    corpo.value.appendChild(segundaDiv);
+    corpo.value.appendChild(terceiraDiv);
+    corpo.value.appendChild(quartaDiv);
+    corpo.value.appendChild(quintaDiv);
+}
+
+watch(props,atualizaPaleta);
+
 function converteParaRGB(hexa) {
     // Hexadecimal será um array com dois elementos;
     const hexadecimal = hexa;
@@ -127,17 +219,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     switch (r%16) {
         case 0:
@@ -161,17 +253,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     switch (Math.floor(g / 16)) {
         case 0:
@@ -195,17 +287,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     switch (g%16) {
         case 0:
@@ -229,17 +321,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     switch (Math.floor(b/16)) {
         case 0:
@@ -263,17 +355,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     switch (b%16) {
         case 0:
@@ -297,17 +389,17 @@ function rgbParaHexa(r, g, b) {
         case 9:
             hexa.push('9');break;
         case 10:
-            hexa.push('A');break;
+            hexa.push('a');break;
         case 11:
-            hexa.push('B');break;
+            hexa.push('b');break;
         case 12:
-            hexa.push('C');break;
+            hexa.push('c');break;
         case 13:
-            hexa.push('D');break;
+            hexa.push('d');break;
         case 14:
-            hexa.push('E');break;
+            hexa.push('e');break;
         case 15:
-            hexa.push('F');break;
+            hexa.push('f');break;
     }
     return hexa.join("");
 }
@@ -336,44 +428,37 @@ function rgbToHsl(r, g, b) {
 
     // 4. Retornar os valores (h: 0-360, s: 0-100%, l: 0-100%)
     return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        l: Math.round(l * 100)
+        h: Math.min(Math.round(h * 360), 360),
+        s: Math.min(Math.round(s * 100), 100),
+        l: Math.min(Math.round(l * 100), 100)
     };
 }
 // Retorna um objeto, pqp
 function hslToRgb(h, s, l) {
-  s /= 100;
-  l /= 100;
-  const k = (n) => (n + h / 30) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  return [255 * f(0), 255 * f(8), 255 * f(4)].map(Math.round);
-}
-// Retorna um array;
-function complementar() {
-    corpo.value.innerHTML = "";
-    let corRGB = props.corEscolhida.split("");
-    corRGB.splice(0, 1); // Remove o #
-    let red = converteParaRGB(corRGB.slice(0, 2)); // Um valor númerico;
-    let green = converteParaRGB(corRGB.slice(2, 4)); // Um valor númerico;
-    let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
-    // Inverte a cor a partir de agora
-    const corOposta = rgbParaHexa(Math.abs(red - 255), Math.abs(green - 255), Math.abs(blue - 255));
-    const meuElemento = document.createElement('div');
-    meuElemento.style.backgroundColor = props.corEscolhida;
-    meuElemento.innerHTML = props.corEscolhida;
-    meuElemento.classList.add('complementar');
-    corpo.value.appendChild(meuElemento);
-    const meuSegundoElemento = document.createElement('div');
-    meuSegundoElemento.style.backgroundColor = corOposta;
-    meuSegundoElemento.innerHTML = corOposta;
-    meuSegundoElemento.classList.add('complementar');
-    corpo.value.appendChild(meuSegundoElemento);
-    
-}
+  // Normaliza e limita os valores
+  h = ((h % 360) + 360) % 360;
+  s = Math.min(100, Math.max(0, s)) / 100;
+  l = Math.min(100, Math.max(0, l)) / 100;
 
-watch(props,atualizaPaleta);
+  const chroma = s * Math.min(l, 1 - l);
+
+  const hueToRgb = (n) => {
+    const k = (n + h / 30) % 12;
+    const color = l - chroma * Math.max(
+      -1,
+      Math.min(k - 3, Math.min(9 - k, 1))
+    );
+    return Math.round(color * 255);
+  };
+
+  return [
+    hueToRgb(0), // R
+    hueToRgb(8), // G
+    hueToRgb(4)  // B
+  ];
+}
+// Retorna um array
+
 </script>
 
 <template>
@@ -386,12 +471,12 @@ watch(props,atualizaPaleta);
 <style>
 section {
     width: 10vw;
-    height: 30vw;
+    height: 30.2vw;
     border: 5px solid gray;
 }
 
 section div {
-    border-bottom: 5px solid gray;
+    border-bottom: 2px solid gray;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -403,5 +488,8 @@ section div.complementar {
 }
 section div.triade {
     height: 10vw;
+}
+section div.monocromatico {
+    height: 5.99vw;
 }
 </style>
