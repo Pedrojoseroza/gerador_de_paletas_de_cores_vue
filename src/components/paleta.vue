@@ -15,6 +15,7 @@ const props = defineProps({
 const corpo = ref(null);
 
 function atualizaPaleta () {
+    
     if (!corpo.value) return;
 
     if (props.tipoDePaleta === 'triade') {
