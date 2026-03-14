@@ -8,14 +8,14 @@ const props = defineProps({
         default: '#000000',
     },
     tipoDePaleta: {
-        type: String, 
+        type: String,
         required: true
     }
 })
 const corpo = ref(null);
 
 function atualizaPaleta () {
-    
+
     if (!corpo.value) return;
 
     if (props.tipoDePaleta === 'triade') {
@@ -33,24 +33,30 @@ function triade() {
     meuElemento.style.backgroundColor = props.corEscolhida;
     meuElemento.innerHTML = props.corEscolhida;
     meuElemento.classList.add('triade');
-    corpo.value.appendChild(meuElemento);
     let corRGB = props.corEscolhida.split("");
     corRGB.splice(0, 1); // Remove o #
     let red = converteParaRGB(corRGB.slice(0, 2)); // Um valor númerico;
     let green = converteParaRGB(corRGB.slice(2, 4)); // Um valor númerico;
     let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
-    let hsl = rgbToHsl(red, green, blue); // Retorna um objeto
+    let hsl = rgbToHsl(red, green, blue); // Retorna um objeto;
     hsl.h = hsl.h + 120;
+    console.log(hsl.l);
+    if (hsl.l < 50) {
+      meuElemento.style.color = 'white';
+    }
+    corpo.value.appendChild(meuElemento);
     if (hsl.h > 360) {
         hsl.h = hsl.h - 360;
     }
     let segundaCor = hslToRgb(hsl.h, hsl.s, hsl.l)
     segundaCor = rgbParaHexa(segundaCor[0], segundaCor[1], segundaCor[2]);
-    console.log(segundaCor);
     const meuSegundoElemento = document.createElement('div');
     meuSegundoElemento.style.backgroundColor = segundaCor;
     meuSegundoElemento.innerHTML = segundaCor;
     meuSegundoElemento.classList.add('triade');
+    if (hsl.l < 50) {
+      meuSegundoElemento.style.color = 'white';
+    }
     corpo.value.appendChild(meuSegundoElemento);
     hsl.h = hsl.h + 120;
     if (hsl.h > 360) {
@@ -62,8 +68,11 @@ function triade() {
     meuTerceiroElemento.style.backgroundColor = terceiraCor;
     meuTerceiroElemento.innerHTML = terceiraCor;
     meuTerceiroElemento.classList.add('triade');
+     if (hsl.l < 50) {
+      meuTerceiroElemento.style.color = 'white';
+    }
     corpo.value.appendChild(meuTerceiroElemento);
-    
+
 }
 // Retorna um array;
 function complementar() {
@@ -73,19 +82,34 @@ function complementar() {
     let red = converteParaRGB(corRGB.slice(0, 2)); // Um valor númerico;
     let green = converteParaRGB(corRGB.slice(2, 4)); // Um valor númerico;
     let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
+    const corHsl = rgbToHsl(red, green, blue);
     // Inverte a cor a partir de agora
-    const corOposta = rgbParaHexa(Math.abs(red - 255), Math.abs(green - 255), Math.abs(blue - 255));
+    let corHslOposta = {...corHsl};
+    
+    corHslOposta.h += 180;
+    if (corHslOposta.h > 360) {
+      corHslOposta.h = corHslOposta.h % 360;
+    }
+    let corOposta = hslToRgb(corHslOposta.h, corHslOposta.s, corHslOposta.l);
+    corOposta = rgbParaHexa(...corOposta);
+    
     const meuElemento = document.createElement('div');
     meuElemento.style.backgroundColor = props.corEscolhida;
     meuElemento.innerHTML = props.corEscolhida;
+    if (corHsl.l < 50) {
+      meuElemento.style.color = 'white';
+    }
     meuElemento.classList.add('complementar');
     corpo.value.appendChild(meuElemento);
     const meuSegundoElemento = document.createElement('div');
     meuSegundoElemento.style.backgroundColor = corOposta;
     meuSegundoElemento.innerHTML = corOposta;
     meuSegundoElemento.classList.add('complementar');
+    if (corHslOposta.l < 50) {
+      meuSegundoElemento.style.color = 'white';
+    }
     corpo.value.appendChild(meuSegundoElemento);
-    
+
 }
 function monocromatico() {
     corpo.value.innerHTML = "";
@@ -96,13 +120,12 @@ function monocromatico() {
     let blue = converteParaRGB(corRGB.slice(-2)); // Um valor númerico;
     const hsl = rgbToHsl(red, green, blue); // Retorna um objeto
 
-    console.log(hsl);
-    
+
+
     // Alterar apenas a luminosidade da cor
-    
+
     let primeiroHsl ={...hsl};
     primeiroHsl.l = Math.min(primeiroHsl.l + 30, 100);
-    console.log(primeiroHsl);
     let primeiraCor = hslToRgb(primeiroHsl.h, primeiroHsl.s, primeiroHsl.l);
     primeiraCor = rgbParaHexa(primeiraCor[0], primeiraCor[1], primeiraCor[2]);
     const primeiraDiv = document.createElement('div');
@@ -113,15 +136,13 @@ function monocromatico() {
     let segundoHsl ={...hsl};
     segundoHsl.l = Math.min(segundoHsl.l + 15, 100);
     let segundaCor = hslToRgb(segundoHsl.h, segundoHsl.s, segundoHsl.l);
-    console.log(segundaCor);
     segundaCor = rgbParaHexa(segundaCor[0], segundaCor[1], segundaCor[2]);
-    console.log(segundaCor);
     const segundaDiv = document.createElement('div');
     segundaDiv.classList.add('monocromatico');
     segundaDiv.style.backgroundColor = segundaCor;
     segundaDiv.innerHTML = segundaCor;
-    
-    const terceiraDiv = document.createElement('div'); 
+
+    const terceiraDiv = document.createElement('div');
     terceiraDiv.classList.add('monocromatico');
     terceiraDiv.style.backgroundColor = props.corEscolhida;
     terceiraDiv.innerHTML = props.corEscolhida;
@@ -143,7 +164,7 @@ function monocromatico() {
     quintaDiv.classList.add('monocromatico');
     quintaDiv.style.backgroundColor = quintaCor;
     quintaDiv.innerHTML = quintaCor;
-    
+
 
     corpo.value.appendChild(primeiraDiv);
     corpo.value.appendChild(segundaDiv);
@@ -193,7 +214,7 @@ function converteParaRGB(hexa) {
         case "f": hexadecimal[1] = 15; break;
     }
     const rgb = hexadecimal[0] * 16 + hexadecimal[1];
-    
+
     return rgb;
 } // Retorna um número
 function rgbParaHexa(r, g, b) {
@@ -408,7 +429,7 @@ function rgbParaHexa(r, g, b) {
 function rgbToHsl(r, g, b) {
     // 1. Normalizar os valores RGB para o intervalo [0, 1]
     r /= 255, g /= 255, b /= 255;
-    
+
     // 2. Encontrar os valores máximos e mínimos
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h, s, l = (max + min) / 2;
@@ -463,20 +484,19 @@ function hslToRgb(h, s, l) {
 </script>
 
 <template>
-    <section ref="corpo">
+    <div ref="corpo" class='container'>
 
-    </section>
+    </div>
 
 </template>
 
 <style>
-section {
+div.container {
     width: 10vw;
     height: 30.2vw;
     border: 5px solid gray;
 }
-
-section div {
+div.container div {
     border-bottom: 2px solid gray;
     display: flex;
     justify-content: center;
@@ -484,13 +504,13 @@ section div {
         width: 10vw;
 
 }
-section div.complementar {
+div.container div.complementar {
     height: 15vw;
 }
-section div.triade {
+div.container div.triade {
     height: 10vw;
 }
-section div.monocromatico {
+div.container div.monocromatico {
     height: 5.99vw;
 }
 </style>

@@ -18,7 +18,7 @@ const pegaPaleta = (paletaEscolhida) => {
       <formulario @enviarCor="pegaCor" @enviarTipoDePaleta = "pegaPaleta"/>
       <paleta :corEscolhida="cor"
       :tipoDePaleta ='tipoDePaletas'></paleta>
-   
+
   </div>
 </template>
 
@@ -26,7 +26,7 @@ const pegaPaleta = (paletaEscolhida) => {
  div.maior {
   display: flex;
   justify-content: space-around;
-  padding: 10vh -0;
+  padding: 10vh 0;
 }
- 
+
 </style>
