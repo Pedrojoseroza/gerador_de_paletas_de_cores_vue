@@ -125,42 +125,57 @@ function monocromatico() {
     // Alterar apenas a luminosidade da cor
 
     let primeiroHsl ={...hsl};
+    const primeiraDiv = document.createElement('div');
     primeiroHsl.l = Math.min(primeiroHsl.l + 30, 100);
+    if(primeiroHsl.l < 50) {
+      primeiraDiv.style.color = 'white';
+    }
     let primeiraCor = hslToRgb(primeiroHsl.h, primeiroHsl.s, primeiroHsl.l);
     primeiraCor = rgbParaHexa(primeiraCor[0], primeiraCor[1], primeiraCor[2]);
-    const primeiraDiv = document.createElement('div');
     primeiraDiv.classList.add('monocromatico');
     primeiraDiv.style.backgroundColor = primeiraCor;
     primeiraDiv.innerHTML= primeiraCor;
 
     let segundoHsl ={...hsl};
+    const segundaDiv = document.createElement('div');
     segundoHsl.l = Math.min(segundoHsl.l + 15, 100);
+    if(segundoHsl.l < 50) {
+      segundaDiv.style.color = 'white';
+    }
     let segundaCor = hslToRgb(segundoHsl.h, segundoHsl.s, segundoHsl.l);
     segundaCor = rgbParaHexa(segundaCor[0], segundaCor[1], segundaCor[2]);
-    const segundaDiv = document.createElement('div');
     segundaDiv.classList.add('monocromatico');
     segundaDiv.style.backgroundColor = segundaCor;
     segundaDiv.innerHTML = segundaCor;
 
     const terceiraDiv = document.createElement('div');
+    if(hsl.l < 50) {
+      terceiraDiv.style.color = 'white';
+    }
     terceiraDiv.classList.add('monocromatico');
     terceiraDiv.style.backgroundColor = props.corEscolhida;
     terceiraDiv.innerHTML = props.corEscolhida;
 
     let quartoHsl ={...hsl};
     quartoHsl.l = Math.max(quartoHsl.l - 15, 0);
+    const quartaDiv = document.createElement('div');
+    if(quartoHsl.l < 50) {
+      quartaDiv.style.color = 'white';
+    }
     let quartaCor = hslToRgb(quartoHsl.h, quartoHsl.s, quartoHsl.l);
     quartaCor = rgbParaHexa(quartaCor[0], quartaCor[1], quartaCor[2]);
-    const quartaDiv = document.createElement('div');
     quartaDiv.classList.add('monocromatico');
     quartaDiv.style.backgroundColor = quartaCor;
     quartaDiv.innerHTML = quartaCor;
 
     let quintoHsl ={...hsl};
     quintoHsl.l = Math.max(quintoHsl.l - 30, 0);
+    const quintaDiv = document.createElement('div');
+    if(quintoHsl.l < 50) {
+      quintaDiv.style.color = 'white';
+    }
     let quintaCor = hslToRgb(quintoHsl.h, quintoHsl.s, quintoHsl.l);
     quintaCor = rgbParaHexa(quintaCor[0], quintaCor[1], quintaCor[2]);
-    const quintaDiv = document.createElement('div');
     quintaDiv.classList.add('monocromatico');
     quintaDiv.style.backgroundColor = quintaCor;
     quintaDiv.innerHTML = quintaCor;
