@@ -1,16 +1,16 @@
 <script setup>
-import { ref } from "vue";
-import formulario from "./components/form.vue";
-import paleta from "./components/paleta.vue"
+import { ref } from 'vue'
+import formulario from './components/form.vue'
+import paleta from './components/paleta.vue'
 
-let cor = ref("");
-const tipoDePaletas = ref('');
+let cor = ref('')
+const tipoDePaletas = ref('')
 
 const pegaCor = (corEscolhida) => {
-  cor.value = corEscolhida;
+  cor.value = corEscolhida
 }
 const pegaPaleta = (paletaEscolhida) => {
-  tipoDePaletas.value = paletaEscolhida;
+  tipoDePaletas.value = paletaEscolhida
 }
 </script>
 
@@ -23,7 +23,7 @@ const pegaPaleta = (paletaEscolhida) => {
       </header>
 
       <main class="maior">
-        <formulario @enviarCor="pegaCor" @enviarTipoDePaleta="pegaPaleta"/>
+        <formulario @enviarCor="pegaCor" @enviarTipoDePaleta="pegaPaleta" />
         <paleta :corEscolhida="cor" :tipoDePaleta="tipoDePaletas"></paleta>
       </main>
     </div>
@@ -60,7 +60,6 @@ const pegaPaleta = (paletaEscolhida) => {
   margin-bottom: 10px;
   font-weight: 700;
 }
-
 
 main.maior {
   display: flex;
