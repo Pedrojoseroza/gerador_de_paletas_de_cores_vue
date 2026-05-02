@@ -2,7 +2,7 @@ import { hexaParaRGB, rgbParaHexa, rgbToHsl, hslToRgb } from '@/utils.js'
 
 export function usePaleta() {
   function triade(arr, corPrincipal) {
-    let corMaisClara = rgbToHsl(...hexaParaRGB({...corPrincipal}))
+    let corMaisClara = rgbToHsl(...hexaParaRGB(corPrincipal))
     let corLetraClara = 'black'
     if (corMaisClara.l < 50) {
       corLetraClara = 'white'
@@ -18,12 +18,14 @@ export function usePaleta() {
     }
     arr.push({ corFundo: corPrincipal, corLetra: corLetraPrin })
 
-    let corMaisEscura = rgbToHsl(...hexaParaRGB({...corPrincipal}))
+    let corMaisEscura = rgbToHsl(...hexaParaRGB(corPrincipal))
     let corLetraEscura = 'black'
-    corMaisEscura.h = corMaisEscura.h - 120
-    corMaisEscura.h = Math.max(corMaisEscura.h, 0)
     if (corMaisEscura.l > 50) {
       corLetraEscura = 'white'
+    }
+    corMaisEscura.h -= 120
+    if (corMaisEscura.h < 0) {
+      corMaisEscura.h += 360
     }
     corMaisEscura = rgbParaHexa(...hslToRgb(corMaisEscura.h, corMaisEscura.s, corMaisEscura.l))
     arr.push({ corFundo: corMaisEscura, corLetra: corLetraEscura })
